@@ -16,57 +16,59 @@
   <script type="text/babel">
     const { useState } = React;
 
+    const SHEETS_URL = ""; // Paste your Apps Script URL here
+
     const INNINGS = [
       {
-        number: 1, category: "K King", emoji: "\u{1F525}",
+        number: 1, category: "K King", emoji: "🔥",
         description: "Which pitcher records the most strikeouts tonight?",
         type: "pick1of3",
         options: [
-          { name: "Jacob Misiorowski", team: "MIL", detail: "vs BOS \u2022 18 K in 11 IP this season \u2022 Elite swing-and-miss stuff" },
-          { name: "Garrett Crochet", team: "BOS", detail: "vs MIL \u2022 15 K in 11 IP \u2022 High-K duel at Fenway" },
-          { name: "Gavin Williams", team: "CLE", detail: "vs KC \u2022 10 K last start vs LAD \u2022 Shut out Dodgers thru 7 IP" }
+          { name: "Jacob Misiorowski", team: "MIL", detail: "vs BOS • 18 K in 11 IP this season • Elite swing-and-miss stuff" },
+          { name: "Garrett Crochet", team: "BOS", detail: "vs MIL • 15 K in 11 IP • High-K duel at Fenway" },
+          { name: "Gavin Williams", team: "CLE", detail: "vs KC • 10 K last start vs LAD • Shut out Dodgers thru 7 IP" }
         ]
       },
       {
-        number: 2, category: "Gone Yard", emoji: "\u{1F4A3}",
+        number: 2, category: "Gone Yard", emoji: "💣",
         description: "Over/Under on total HRs across tonight's 15-game slate?",
         type: "overunder", line: 18.5,
-        context: "HOU @ COL at Coors Field \u2022 Astros lead MLB in OPS \u2022 Wind blowing out in Chicago"
+        context: "HOU @ COL at Coors Field • Astros lead MLB in OPS • Wind blowing out in Chicago"
       },
       {
-        number: 3, category: "Speed Demon", emoji: "\u26A1",
+        number: 3, category: "Speed Demon", emoji: "⚡",
         description: "Will there be a stolen base in the first 3 innings?",
-        type: "yesno", game: "LAD @ TOR \u2022 World Series rematch",
-        context: "Dodgers 8-2, lead NL West \u2022 Won 14-2 last night \u2022 Dodgers have been aggressive on the bases"
+        type: "yesno", game: "LAD @ TOR • World Series rematch",
+        context: "Dodgers 8-2, lead NL West • Won 14-2 last night • Dodgers have been aggressive on the bases"
       },
       {
-        number: 4, category: "RBI Machine", emoji: "\u{1F4AA}",
+        number: 4, category: "RBI Machine", emoji: "💪",
         description: "Which batter drives in the most runs tonight?",
         type: "pick1of3",
         options: [
-          { name: "Yordan Alvarez", team: "HOU", detail: "@ COL \u2022 Astros 1st in hits & runs \u2022 Coors Field + healthy Yordan = damage" },
-          { name: "Shohei Ohtani", team: "LAD", detail: "@ TOR \u2022 Dodgers 1st in BA, SLG & HR \u2022 LAD scored 14 runs last night" },
-          { name: "Jose Ramirez", team: "CLE", detail: "vs KC \u2022 Just set franchise record: 1,620 career games \u2022 Heart of CLE lineup" }
+          { name: "Yordan Alvarez", team: "HOU", detail: "@ COL • Astros 1st in hits & runs • Coors Field + healthy Yordan = damage" },
+          { name: "Shohei Ohtani", team: "LAD", detail: "@ TOR • Dodgers 1st in BA, SLG & HR • LAD scored 14 runs last night" },
+          { name: "Jose Ramirez", team: "CLE", detail: "vs KC • Just set franchise record: 1,620 career games • Heart of CLE lineup" }
         ]
       },
       {
-        number: 5, category: "Pitcher's Duel", emoji: "\u{1F910}",
+        number: 5, category: "Pitcher's Duel", emoji: "🤐",
         description: "Which game has the lowest combined score?",
         type: "pick1of3",
         options: [
-          { name: "DET @ MIN", team: "", detail: "Skubal vs Bradley \u2022 Skubal: 0.69 ERA, 1 ER in 13 IP \u2022 Bradley: 1 ER in 10.1 IP" },
-          { name: "SD @ PIT", team: "", detail: "Pivetta vs Skenes \u2022 Both bounced back after rough openers \u2022 PNC Park pitcher-friendly" },
-          { name: "KC @ CLE", team: "", detail: "Cameron vs Williams \u2022 Lowest O/U on slate \u2022 Freezing temps in Cleveland" }
+          { name: "DET @ MIN", team: "", detail: "Skubal vs Bradley • Skubal: 0.69 ERA, 1 ER in 13 IP • Bradley: 1 ER in 10.1 IP" },
+          { name: "SD @ PIT", team: "", detail: "Pivetta vs Skenes • Both bounced back after rough openers • PNC Park pitcher-friendly" },
+          { name: "KC @ CLE", team: "", detail: "Cameron vs Williams • Lowest O/U on slate • Freezing temps in Cleveland" }
         ]
       },
       {
-        number: 6, category: "Extra Bases", emoji: "\u{1F3C3}",
+        number: 6, category: "Extra Bases", emoji: "🏃",
         description: "Which batter has the most total bases tonight?",
         type: "pick1of3",
         options: [
-          { name: "Vladimir Guerrero Jr.", team: "TOR", detail: "vs LAD \u2022 Getting on base consistently \u2022 WS rematch motivation at Rogers Centre" },
-          { name: "Adolis Garcia", team: "PHI", detail: "@ SF \u2022 .835 OPS, 2nd on PHI \u2022 Change of scenery working so far" },
-          { name: "Colt Keith", team: "DET", detail: "@ MIN \u2022 Surprise OPS leader for Tigers \u2022 Emerging breakout candidate" }
+          { name: "Vladimir Guerrero Jr.", team: "TOR", detail: "vs LAD • Getting on base consistently • WS rematch motivation at Rogers Centre" },
+          { name: "Adolis Garcia", team: "PHI", detail: "@ SF • .835 OPS, 2nd on PHI • Change of scenery working so far" },
+          { name: "Colt Keith", team: "DET", detail: "@ MIN • Surprise OPS leader for Tigers • Emerging breakout candidate" }
         ]
       },
       {
@@ -74,9 +76,9 @@
         description: "Which game has a run scored first?",
         type: "pick1of3",
         options: [
-          { name: "HOU @ COL", team: "", detail: "Coors Field \u2022 Astros 1st in MLB in runs \u2022 Burrows allowing heavy traffic (14 H, 5 BB in 10.2 IP)" },
-          { name: "LAD @ TOR", team: "", detail: "Dodgers scored early & often last night \u2022 Yamamoto vs Gausman \u2022 7:07 PM ET" },
-          { name: "MIL @ BOS", team: "", detail: "Misiorowski vs Crochet \u2022 High-K but both can be wild early \u2022 Fenway factor" }
+          { name: "HOU @ COL", team: "", detail: "Coors Field • Astros 1st in MLB in runs • Burrows allowing heavy traffic (14 H, 5 BB in 10.2 IP)" },
+          { name: "LAD @ TOR", team: "", detail: "Dodgers scored early & often last night • Yamamoto vs Gausman • 7:07 PM ET" },
+          { name: "MIL @ BOS", team: "", detail: "Misiorowski vs Crochet • High-K but both can be wild early • Fenway factor" }
         ]
       },
       {
@@ -84,20 +86,44 @@
         description: "Which starter goes the deepest tonight?",
         type: "pick1of3",
         options: [
-          { name: "Sandy Alcantara", team: "MIA", detail: "vs CIN \u2022 0.00 ERA thru 16 IP \u2022 1.45 xERA \u2022 Elite workhorse" },
-          { name: "Cam Schlittler", team: "NYY", detail: "vs OAK \u2022 0 runs in 11.2 IP \u2022 Dominant start to career \u2022 Weak A's lineup" },
-          { name: "Tarik Skubal", team: "DET", detail: "@ MIN \u2022 0.69 ERA, 1 ER in 13 IP \u2022 Reigning Cy Young \u2022 Always goes deep" }
+          { name: "Sandy Alcantara", team: "MIA", detail: "vs CIN • 0.00 ERA thru 16 IP • 1.45 xERA • Elite workhorse" },
+          { name: "Cam Schlittler", team: "NYY", detail: "vs OAK • 0 runs in 11.2 IP • Dominant start to career • Weak A's lineup" },
+          { name: "Tarik Skubal", team: "DET", detail: "@ MIN • 0.69 ERA, 1 ER in 13 IP • Reigning Cy Young • Always goes deep" }
         ]
       },
       {
         number: 9, category: "The Closer", emoji: "\u{1F6AA}",
         description: "Do the Braves bullpen convert the save tonight?",
-        type: "yesno", game: "ATL @ LAA \u2022 9:38 PM ET",
-        context: "Braves: Lowest ERA in MLB (1.82) \u2022 Best bullpen ERA (1.08) \u2022 Angels struggling at 3-7"
+        type: "yesno", game: "ATL @ LAA • 9:38 PM ET",
+        context: "Braves: Lowest ERA in MLB (1.82) • Best bullpen ERA (1.08) • Angels struggling at 3-7"
       }
     ];
 
-    const PAYOUTS = { 5: "1x (Break Even)", 6: "2x", 7: "5x", 8: "15x", 9: "50x \u{1F3C6}" };
+    const PAYOUTS = { 5: "1x (Break Even)", 6: "2x", 7: "5x", 8: "15x", 9: "50x 🏆" };
+
+    function sendToSheets(picksObj) {
+      if (!SHEETS_URL) return;
+      var pickArray = [];
+      Object.keys(picksObj).forEach(function(key) {
+        var idx = parseInt(key);
+        var inn = INNINGS[idx];
+        var val = picksObj[key];
+        var pickLabel = "";
+        if (inn.type === "pick1of3") {
+          pickLabel = inn.options[val].name;
+        } else if (inn.type === "overunder") {
+          pickLabel = val === "over" ? "Over " + inn.line : "Under " + inn.line;
+        } else {
+          pickLabel = val === "yes" ? "Yes" : "No";
+        }
+        pickArray.push({ inning: inn.number, category: inn.category, pick: pickLabel });
+      });
+      fetch(SHEETS_URL, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({ type: "ath", date: "2026-04-07", picks: pickArray })
+      }).catch(function(err) { console.log("Sheets sync error:", err); });
+    }
 
     function AroundTheHorn() {
       const [screen, setScreen] = useState("splash");
@@ -107,6 +133,7 @@
       const [locked, setLocked] = useState(false);
       const [animatingOut, setAnimatingOut] = useState(false);
       const [results, setResults] = useState(null);
+      const [saved, setSaved] = useState(false);
 
       const inning = INNINGS[currentInning];
 
@@ -129,6 +156,8 @@
         } else {
           const correct = Math.floor(Math.random() * 5) + 5;
           setResults(correct);
+          sendToSheets(picks);
+          setSaved(true);
           setScreen("results");
         }
       };
@@ -141,6 +170,7 @@
         setLocked(false);
         setResults(null);
         setAnimatingOut(false);
+        setSaved(false);
       };
 
       if (screen === "splash") {
@@ -161,18 +191,18 @@
               </div>
               <h1 style={styles.splashTitle}>Around the Horn</h1>
               <p style={styles.splashSub}>9 Innings. 9 Picks. One Shot.</p>
-              <p style={{fontSize: 12, color: "#f59e0b", margin: "0 0 12px", fontWeight: 600}}>Tuesday, April 7 \u2022 15 Games</p>
+              <p style={{fontSize: 12, color: "#f59e0b", margin: "0 0 12px", fontWeight: 600}}>Tuesday, April 7 • 15 Games</p>
               <div style={styles.splashRules}>
-                <p style={styles.ruleText}>Work your way around the diamond \u2014 one inning at a time. Each inning is a different prop category. You can't see what's next until you lock in.</p>
+                <p style={styles.ruleText}>Work your way around the diamond — one inning at a time. Each inning is a different prop category. You can't see what's next until you lock in.</p>
                 <div style={styles.payoutPreview}>
                   <div style={styles.payoutRow}><span style={styles.payoutLabel}>5/9</span><span style={styles.payoutVal}>1x</span></div>
                   <div style={styles.payoutRow}><span style={styles.payoutLabel}>6/9</span><span style={styles.payoutVal}>2x</span></div>
                   <div style={styles.payoutRow}><span style={styles.payoutLabel}>7/9</span><span style={styles.payoutVal}>5x</span></div>
                   <div style={styles.payoutRow}><span style={styles.payoutLabel}>8/9</span><span style={styles.payoutVal}>15x</span></div>
-                  <div style={styles.payoutRow}><span style={{...styles.payoutLabel, color: "#f59e0b"}}>9/9</span><span style={{...styles.payoutVal, color: "#f59e0b"}}>50x \u{1F3C6}</span></div>
+                  <div style={styles.payoutRow}><span style={{...styles.payoutLabel, color: "#f59e0b"}}>9/9</span><span style={{...styles.payoutVal, color: "#f59e0b"}}>50x 🏆</span></div>
                 </div>
               </div>
-              <button style={styles.playBtn} onClick={() => setScreen("game")}>Play \u2014 $5 Entry</button>
+              <button style={styles.playBtn} onClick={() => setScreen("game")}>Play — $5 Entry</button>
             </div>
           </div>
         );
@@ -187,7 +217,7 @@
           <div style={styles.container}>
             <div style={styles.resultsContent}>
               <h2 style={styles.resultsTitle}>
-                {results === 9 ? "\u{1F3C6} PERFECT GAME \u{1F3C6}" : results >= 7 ? "\u{1F525} Great Round!" : results >= 5 ? "Solid Night" : "Tough Break"}
+                {results === 9 ? "🏆 PERFECT GAME 🏆" : results >= 7 ? "🔥 Great Round!" : results >= 5 ? "Solid Night" : "Tough Break"}
               </h2>
               <div style={styles.scoreCircle}>
                 <span style={styles.scoreNum}>{results}</span>
@@ -197,6 +227,9 @@
                 <div style={styles.payoutBadge}>
                   <span style={styles.payoutBadgeText}>{PAYOUTS[results]}</span>
                 </div>
+              )}
+              {saved && (
+                <p style={{fontSize: 12, color: "#22c55e", margin: 0}}>✅ Picks saved to Google Sheets</p>
               )}
               <div style={styles.resultsGrid}>
                 {INNINGS.map((inn, i) => {
@@ -210,7 +243,7 @@
                       <span style={styles.resultEmoji}>{inn.emoji}</span>
                       <span style={styles.resultCat}>{inn.category}</span>
                       <span style={{ color: hit ? "#22c55e" : "#ef4444", fontWeight: 700, fontSize: 14 }}>
-                        {hit ? "\u2713" : "\u2717"}
+                        {hit ? "✓" : "✗"}
                       </span>
                     </div>
                   );
@@ -232,7 +265,7 @@
                 border: i === currentInning ? "2px solid #f59e0b" : "2px solid transparent",
                 transform: i === currentInning ? "scale(1.3)" : "scale(1)"
               }}>
-                {i < currentInning && <span style={{fontSize: 8, color: "#000"}}>{"\u2713"}</span>}
+                {i < currentInning && <span style={{fontSize: 8, color: "#000"}}>✓</span>}
               </div>
             ))}
           </div>
@@ -250,7 +283,7 @@
             <p style={styles.inningDesc}>{inning.description}</p>
             {(inning.game || inning.context) && (
               <p style={styles.contextText}>
-                {[inning.game, inning.context].filter(Boolean).join(" \u2022 ")}
+                {[inning.game, inning.context].filter(Boolean).join(" • ")}
               </p>
             )}
 
@@ -277,12 +310,12 @@
                   <div style={styles.ouBtns}>
                     <button disabled={locked} onClick={() => setSelectedOption("over")}
                       style={{...styles.ouBtn, borderColor: selectedOption === "over" ? "#22c55e" : "#333", background: selectedOption === "over" ? "rgba(34,197,94,0.12)" : "#1a1a1a", opacity: locked && selectedOption !== "over" ? 0.4 : 1}}>
-                      <span style={{fontSize: 22}}>{"\u2B06\uFE0F"}</span>
+                      <span style={{fontSize: 22}}>⬆️</span>
                       <span style={styles.ouLabel}>Over {inning.line}</span>
                     </button>
                     <button disabled={locked} onClick={() => setSelectedOption("under")}
                       style={{...styles.ouBtn, borderColor: selectedOption === "under" ? "#ef4444" : "#333", background: selectedOption === "under" ? "rgba(239,68,68,0.1)" : "#1a1a1a", opacity: locked && selectedOption !== "under" ? 0.4 : 1}}>
-                      <span style={{fontSize: 22}}>{"\u2B07\uFE0F"}</span>
+                      <span style={{fontSize: 22}}>⬇️</span>
                       <span style={styles.ouLabel}>Under {inning.line}</span>
                     </button>
                   </div>
@@ -294,12 +327,12 @@
                   <div style={styles.ouBtns}>
                     <button disabled={locked} onClick={() => setSelectedOption("yes")}
                       style={{...styles.ouBtn, borderColor: selectedOption === "yes" ? "#22c55e" : "#333", background: selectedOption === "yes" ? "rgba(34,197,94,0.12)" : "#1a1a1a", opacity: locked && selectedOption !== "yes" ? 0.4 : 1}}>
-                      <span style={{fontSize: 22}}>{"\u2705"}</span>
+                      <span style={{fontSize: 22}}>✅</span>
                       <span style={styles.ouLabel}>Yes</span>
                     </button>
                     <button disabled={locked} onClick={() => setSelectedOption("no")}
                       style={{...styles.ouBtn, borderColor: selectedOption === "no" ? "#ef4444" : "#333", background: selectedOption === "no" ? "rgba(239,68,68,0.1)" : "#1a1a1a", opacity: locked && selectedOption !== "no" ? 0.4 : 1}}>
-                      <span style={{fontSize: 22}}>{"\u274C"}</span>
+                      <span style={{fontSize: 22}}>❌</span>
                       <span style={styles.ouLabel}>No</span>
                     </button>
                   </div>
@@ -312,12 +345,12 @@
             {!locked ? (
               <button style={{...styles.lockBtn, opacity: selectedOption === null ? 0.4 : 1, cursor: selectedOption === null ? "default" : "pointer"}}
                 disabled={selectedOption === null} onClick={lockPick}>
-                Lock It In {"\u{1F512}"}
+                Lock It In 🔒
               </button>
             ) : (
               <button style={{...styles.nextBtn, opacity: animatingOut ? 0.6 : 1, cursor: animatingOut ? "default" : "pointer"}}
                 disabled={animatingOut} onClick={nextInning}>
-                {currentInning < 8 ? `Inning ${currentInning + 2} \u2192` : "See Results \u{1F3C6}"}
+                {currentInning < 8 ? `Inning ${currentInning + 2} →` : "See Results 🏆"}
               </button>
             )}
           </div>
