@@ -12,463 +12,509 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-var R = React;
-var useState = R.useState;
+var useState = React.useState;
 
 var E = {
   fire: String.fromCodePoint(0x1F525),
-  bat: String.fromCodePoint(0x1F3CF),
-  flex: String.fromCodePoint(0x1F4AA),
   bomb: String.fromCodePoint(0x1F4A3),
-  arm: String.fromCodePoint(0x1FAB6),
-  walk: String.fromCodePoint(0x1F6B6),
+  flex: String.fromCodePoint(0x1F4AA),
   zap: String.fromCodePoint(0x26A1),
   punch: String.fromCodePoint(0x1F4A5),
-  door: String.fromCodePoint(0x1F6AA),
   trophy: String.fromCodePoint(0x1F3C6),
   lock: String.fromCodePoint(0x1F512),
   money: String.fromCodePoint(0x1F4B0),
   chart: String.fromCodePoint(0x1F4C8),
   moon: String.fromCodePoint(0x1F319),
   sun: String.fromCodePoint(0x2600),
-  star: String.fromCodePoint(0x2B50),
   check: "\u2713",
   cross: "\u2717",
   arrow: "\u2192",
-  yes: String.fromCodePoint(0x2705),
-  no: String.fromCodePoint(0x274C)
+  up: String.fromCodePoint(0x2B06) + String.fromCodePoint(0xFE0F),
+  down: String.fromCodePoint(0x2B07) + String.fromCodePoint(0xFE0F),
+  base: String.fromCodePoint(0x1F3C3),
+  shoe: String.fromCodePoint(0x1F45F),
+  bat: String.fromCodePoint(0x1F3CF),
+  glove: String.fromCodePoint(0x1F9E4),
+  star: String.fromCodePoint(0x2B50)
 };
 
 var NIGHTS = [
   {
-    title: "Night 1 - Early Innings",
-    subtitle: "Monday, April 6",
+    title: "Night 1 \u2014 Early Innings",
+    sub: "Monday, April 6",
     icon: E.sun,
     color: "#f59e0b",
-    mult2: 1.2,
-    mult3: 1.8,
-    innings: [
-      { num: 1, cat: "K King", icon: E.fire, desc: "Which pitcher records the most strikeouts tonight?",
-        opts: [
-          { name: "Jacob Misiorowski", tag: "MIL", info: "vs BOS - 18 K in 11 IP - Elite swing-and-miss" },
-          { name: "Garrett Crochet", tag: "BOS", info: "vs MIL - 15 K in 11 IP - High-K duel at Fenway" },
-          { name: "Gavin Williams", tag: "CLE", info: "vs KC - 10 K last start vs LAD - 7 shutout innings" }
-        ]},
-      { num: 2, cat: "Extra Bases", icon: E.bat, desc: "Which batter has the most total bases tonight?",
-        opts: [
-          { name: "Yordan Alvarez", tag: "HOU", info: "@ COL - Coors Field + HOU leads MLB in OPS" },
-          { name: "Andy Pages", tag: "LAD", info: "@ TOR - 16-for-34 (.471) - 3 HR - Best hitter on LAD" },
-          { name: "Shea Langeliers", tag: "OAK", info: "@ NYY - 5 HR in 6 games - Tied MLB HR lead" }
-        ]},
-      { num: 3, cat: "RBI Machine", icon: E.flex, desc: "Which batter drives in the most runs tonight?",
-        opts: [
-          { name: "Shohei Ohtani", tag: "LAD", info: "@ TOR - Dodgers 1st in BA, SLG, HR - 14 runs last night" },
-          { name: "Jose Ramirez", tag: "CLE", info: "vs KC - Franchise record 1,620 games - Heart of lineup" },
-          { name: "Adolis Garcia", tag: "PHI", info: "@ SF - .835 OPS - 2nd on Phillies - New scenery working" }
-        ]}
+    mult2: 1.2, mult3: 1.8,
+    picks: [
+      {
+        cat: "Strikeouts", icon: E.fire,
+        player: "Jacob Misiorowski", team: "MIL", opp: "@ BOS",
+        stat: "Strikeouts", line: 6.5,
+        context: [
+          "18 K in 11 IP this season (14.7 K/9)",
+          "Elite swing-and-miss: 38% SwStr rate",
+          "BOS strikes out 9.2 times per game (12th most)"
+        ],
+        trend: "L3 starts: 7, 5, 6 Ks"
+      },
+      {
+        cat: "Total Bases", icon: E.bat,
+        player: "Yordan Alvarez", team: "HOU", opp: "@ COL",
+        stat: "Total Bases", line: 2.5,
+        context: [
+          "HOU leads MLB in OPS and runs scored",
+          "Coors Field: +28% HR factor, +12% XBH factor",
+          "Facing Kyle Freeland: 5.23 xERA, allowing hard contact"
+        ],
+        trend: "L5 games: 3, 1, 4, 2, 3 TB"
+      },
+      {
+        cat: "RBIs", icon: E.flex,
+        player: "Shohei Ohtani", team: "LAD", opp: "@ TOR",
+        stat: "RBIs", line: 1.5,
+        context: [
+          "Dodgers 1st in BA, SLG, and HR",
+          "LAD scored 14 runs last night vs TOR",
+          "37-game on-base streak (longest in MLB)"
+        ],
+        trend: "L5 games: 2, 0, 3, 1, 2 RBIs"
+      }
     ]
   },
   {
-    title: "Night 2 - Middle Innings",
-    subtitle: "Tuesday, April 7",
+    title: "Night 2 \u2014 Middle Innings",
+    sub: "Tuesday, April 7",
     icon: E.chart,
     color: "#f97316",
-    mult2: 1.5,
-    mult3: 2.5,
-    innings: [
-      { num: 4, cat: "Gone Yard", icon: E.bomb, desc: "Which batter hits a home run tonight?",
-        opts: [
-          { name: "Colt Keith", tag: "DET", info: "@ MIN - Surprise OPS leader for Tigers - Breakout candidate" },
-          { name: "Ian Happ", tag: "CHC", info: "@ TB - 4 HR already - Cubs leader in SLG" },
-          { name: "Vlad Guerrero Jr.", tag: "TOR", info: "vs LAD - WS rematch - Consistent at the plate" }
-        ]},
-      { num: 5, cat: "The Workhorse", icon: E.arm, desc: "Which starter records the most outs tonight?",
-        opts: [
-          { name: "Sandy Alcantara", tag: "MIA", info: "vs CIN - 0.00 ERA in 16 IP - 1.45 xERA - Elite workhorse" },
-          { name: "Tarik Skubal", tag: "DET", info: "@ MIN - 0.69 ERA - 1 ER in 13 IP - Reigning Cy Young" },
-          { name: "Cam Schlittler", tag: "NYY", info: "vs OAK - 0 runs in 11.2 IP - Weak A's lineup" }
-        ]},
-      { num: 6, cat: "Bases Loaded", icon: E.walk, desc: "Which batter reaches base the most times tonight?",
-        opts: [
-          { name: "Mike Trout", tag: "LAA", info: "vs ATL - Healthy start to 2026 - SEA pitched around him" },
-          { name: "Andres Gimenez", tag: "CLE", info: "vs KC - MLB hits leader - 6 multi-hit games" },
-          { name: "Joey Wiemer", tag: "MIL", info: "@ BOS - Reached base in first 10 PA of season" }
-        ]}
+    mult2: 1.5, mult3: 2.5,
+    picks: [
+      {
+        cat: "Home Runs", icon: E.bomb,
+        player: "Shea Langeliers", team: "OAK", opp: "@ NYY",
+        stat: "Home Runs", line: 0.5,
+        context: [
+          "5 HR in first 6 games \u2014 tied for MLB lead",
+          "Tied 1992 Mark McGwire for A's record pace",
+          "BUT: facing Cam Schlittler (0 runs in 11.2 IP)"
+        ],
+        trend: "L5 games: 1, 0, 2, 1, 1 HR"
+      },
+      {
+        cat: "Pitcher Outs", icon: E.glove,
+        player: "Sandy Alcantara", team: "MIA", opp: "vs CIN",
+        stat: "Outs Recorded", line: 18.5,
+        context: [
+          "0.00 ERA through 16 IP \u2014 hasn't allowed a run",
+          "1.45 xERA confirms he's not just getting lucky",
+          "CIN offense ranks last in MLB in OPS w/RISP"
+        ],
+        trend: "L2 starts: 21, 18 outs recorded"
+      },
+      {
+        cat: "Times on Base", icon: E.base,
+        player: "Andres Gimenez", team: "CLE", opp: "vs KC",
+        stat: "Hits + Walks", line: 2.5,
+        context: [
+          "MLB leader in hits through first 10 games",
+          "6 multi-hit games already \u2014 elite contact rate",
+          "Facing Noah Cameron: solid debut but only 5 IP"
+        ],
+        trend: "L5 games: 3, 2, 3, 1, 4 times reached"
+      }
     ]
   },
   {
-    title: "Night 3 - Late Innings",
-    subtitle: "Wednesday, April 8",
+    title: "Night 3 \u2014 Late Innings",
+    sub: "Wednesday, April 8",
     icon: E.moon,
     color: "#ef4444",
-    mult2: 2.0,
-    mult3: 4.0,
-    innings: [
-      { num: 7, cat: "Speed Demon", icon: E.zap, desc: "Which player steals a base tonight?",
-        opts: [
-          { name: "Jose Altuve", tag: "HOU", info: "@ COL - 18 SB last year - Aggressive on bases" },
-          { name: "Elly De La Cruz", tag: "CIN", info: "@ MIA - Elite sprint speed - 67 SB last year" },
-          { name: "Bobby Witt Jr.", tag: "KC", info: "@ CLE - 30+ SB threat - Dynamic top of order" }
-        ]},
-      { num: 8, cat: "Punchout", icon: E.punch, desc: "Which batter strikes out the most tonight?",
-        opts: [
-          { name: "Julio Rodriguez", tag: "SEA", info: "@ TEX - 6-for-39 with 13 K - In a bad slump" },
-          { name: "Cal Raleigh", tag: "SEA", info: "@ TEX - 5-for-38 with 20 K - Worst stretch of career" },
-          { name: "Giancarlo Stanton", tag: "NYY", info: "vs OAK - .400 BA but 5 K in 25 PA - Hot yet volatile" }
-        ]},
-      { num: 9, cat: "The Closer", icon: E.door, desc: "Which reliever records the most strikeouts tonight?",
-        opts: [
-          { name: "Emmanuel Clase", tag: "CLE", info: "vs KC - 91% save rate - 0.82 ERA - Elite closer" },
-          { name: "Braves Bullpen Arm", tag: "ATL", info: "@ LAA - Best bullpen ERA in MLB (1.08)" },
-          { name: "Paul Sewald", tag: "ARI", info: "@ NYM - Veteran closer - High K rate in leverage spots" }
-        ]}
+    mult2: 2.0, mult3: 4.0,
+    picks: [
+      {
+        cat: "Stolen Bases", icon: E.zap,
+        player: "Elly De La Cruz", team: "CIN", opp: "@ MIA",
+        stat: "Stolen Bases", line: 0.5,
+        context: [
+          "67 SB last season \u2014 elite sprint speed",
+          "Attempts a steal roughly every 2.4 games",
+          "MIA catcher pop time: 1.98s (bottom 20%)"
+        ],
+        trend: "L5 games: 1, 0, 0, 1, 1 SB"
+      },
+      {
+        cat: "Strikeouts (Batter)", icon: E.punch,
+        player: "Cal Raleigh", team: "SEA", opp: "@ TEX",
+        stat: "Strikeouts", line: 1.5,
+        context: [
+          "5-for-38 with 20 K \u2014 worst stretch of his career",
+          "Striking out 52.6% of the time this season",
+          "Facing Nathan Eovaldi: high K rate but loud contact"
+        ],
+        trend: "L5 games: 2, 3, 1, 2, 3 Ks"
+      },
+      {
+        cat: "Reliever Ks", icon: E.star,
+        player: "Emmanuel Clase", team: "CLE", opp: "vs KC",
+        stat: "Strikeouts", line: 1.5,
+        context: [
+          "91% save rate \u2014 0.82 ERA \u2014 elite closer",
+          "But he's a ground ball pitcher, not a K artist (7.8 K/9)",
+          "KC makes contact \u2014 low team K rate"
+        ],
+        trend: "L5 appearances: 1, 2, 0, 1, 2 Ks"
+      }
     ]
   }
 ];
 
 function App() {
-  var s = useState("splash"); var view = s[0]; var setView = s[1];
-  var s2 = useState(0); var nightIdx = s2[0]; var setNightIdx = s2[1];
-  var s3 = useState(0); var pickIdx = s3[0]; var setPickIdx = s3[1];
+  var s1 = useState("splash"); var view = s1[0]; var setView = s1[1];
+  var s2 = useState(0); var nIdx = s2[0]; var setNIdx = s2[1];
+  var s3 = useState(0); var pIdx = s3[0]; var setPIdx = s3[1];
   var s4 = useState(null); var sel = s4[0]; var setSel = s4[1];
   var s5 = useState(false); var locked = s5[0]; var setLocked = s5[1];
   var s6 = useState(false); var fading = s6[0]; var setFading = s6[1];
-  var s7 = useState([]); var nightPicks = s7[0]; var setNightPicks = s7[1];
-  var s8 = useState([]); var nightResults = s8[0]; var setNightResults = s8[1];
+  var s7 = useState([]); var curPicks = s7[0]; var setCurPicks = s7[1];
+  var s8 = useState([]); var allResults = s8[0]; var setAllResults = s8[1];
   var s9 = useState([]); var mults = s9[0]; var setMults = s9[1];
-  var s10 = useState(5); var entry = s10[0];
-
-  var night = NIGHTS[nightIdx];
+  var entry = 5;
+  var night = NIGHTS[nIdx];
 
   function reset() {
-    setView("splash"); setNightIdx(0); setPickIdx(0); setSel(null);
-    setLocked(false); setFading(false); setNightPicks([]); setNightResults([]); setMults([]);
+    setView("splash"); setNIdx(0); setPIdx(0); setSel(null);
+    setLocked(false); setFading(false); setCurPicks([]); setAllResults([]); setMults([]);
   }
+
+  function getMult() { var m=1; mults.forEach(function(v){m*=v}); return m; }
 
   function lockPick() {
     if (sel === null) return;
-    setNightPicks(function(p) { return p.concat([sel]); });
+    setCurPicks(function(p){return p.concat([sel])});
     setLocked(true);
   }
 
   function nextPick() {
     if (fading) return;
-    if (pickIdx < 2) {
+    if (pIdx < 2) {
       setFading(true);
-      setTimeout(function() { setPickIdx(function(p){return p+1}); setSel(null); setLocked(false); setFading(false); }, 280);
+      setTimeout(function(){setPIdx(function(p){return p+1}); setSel(null); setLocked(false); setFading(false);}, 280);
     } else {
-      var results = nightPicks.concat([sel]).map(function() { return Math.random() > 0.45; });
-      setNightResults(function(p) { return p.concat([results]); });
-      var correct = results.filter(Boolean).length;
-      if (correct >= 2) {
-        var m = correct === 3 ? night.mult3 : night.mult2;
-        setMults(function(p) { return p.concat([m]); });
-      }
+      var res = curPicks.concat([sel]).map(function(){return Math.random()>0.45});
+      setAllResults(function(p){return p.concat([res])});
+      var c = res.filter(Boolean).length;
+      if (c >= 2) { setMults(function(p){return p.concat([c===3?night.mult3:night.mult2])}); }
       setView("nightResult");
     }
   }
 
-  function getCurrentMult() {
-    var m = 1;
-    mults.forEach(function(v) { m = m * v; });
-    return m;
-  }
+  function startNight() { setPIdx(0); setSel(null); setLocked(false); setCurPicks([]); setView("pick"); }
 
-  function startNight() {
-    setPickIdx(0); setSel(null); setLocked(false); setNightPicks([]); setView("pick");
-  }
-
-  // SPLASH
+  // ====== SPLASH ======
   if (view === "splash") {
     return (
-      <div style={ST.ctr}>
-        <div style={ST.splash}>
-          <svg width="100" height="100" viewBox="0 0 120 120">
-            <g transform="translate(60,15)">
-              <polygon points="0,0 45,40 0,80 -45,40" fill="none" stroke="#f59e0b" strokeWidth="2.5"/>
-              <circle cx="0" cy="0" r="6" fill="#f59e0b"/><circle cx="45" cy="40" r="6" fill="#f59e0b"/>
-              <circle cx="0" cy="80" r="6" fill="#f59e0b"/><circle cx="-45" cy="40" r="6" fill="#f59e0b"/>
-              <circle cx="0" cy="35" r="4" fill="#ef4444"/>
-            </g>
-          </svg>
-          <h1 style={{fontSize:28,fontWeight:800,margin:0}}>Around the Horn</h1>
-          <p style={{fontSize:14,color:"#999",margin:0}}>3 Nights. 9 Picks. One Series.</p>
-          <div style={ST.box}>
-            <p style={{fontSize:13,color:"#aaa",lineHeight:"1.5",margin:"0 0 12px"}}>
-              Play a 3-night series. Each night you make 3 player prop picks. Hit 2 of 3 to advance. Your multiplier compounds each night. Cash out anytime or push for a bigger payout.
-            </p>
-            <div style={{display:"flex",gap:8,marginBottom:12}}>
-              {NIGHTS.map(function(n,i) {
-                return (
-                  <div key={i} style={{flex:1,background:"#111",borderRadius:10,padding:"10px 8px",border:"1px solid #222",textAlign:"center"}}>
-                    <div style={{fontSize:11,color:"#555",fontWeight:600,marginBottom:4}}>{"NIGHT "+(i+1)}</div>
-                    <div style={{fontSize:13,fontWeight:700,color:n.color}}>{n.icon}</div>
-                    <div style={{fontSize:10,color:"#666",marginTop:2}}>{"2/3: "+n.mult2+"x"}</div>
-                    <div style={{fontSize:10,color:n.color,fontWeight:700}}>{"3/3: "+n.mult3+"x"}</div>
-                  </div>
-                );
-              })}
+      <div style={ST.ctr}><div style={ST.splash}>
+        <svg width="100" height="100" viewBox="0 0 120 120">
+          <g transform="translate(60,15)">
+            <polygon points="0,0 45,40 0,80 -45,40" fill="none" stroke="#f59e0b" strokeWidth="2.5"/>
+            <circle cx="0" cy="0" r="6" fill="#f59e0b"/><circle cx="45" cy="40" r="6" fill="#f59e0b"/>
+            <circle cx="0" cy="80" r="6" fill="#f59e0b"/><circle cx="-45" cy="40" r="6" fill="#f59e0b"/>
+            <circle cx="0" cy="35" r="4" fill="#ef4444"/>
+          </g>
+        </svg>
+        <h1 style={{fontSize:28,fontWeight:800,margin:0}}>Around the Horn</h1>
+        <p style={{fontSize:14,color:"#999",margin:0}}>3 Nights. 9 Props. One Series.</p>
+        <div style={ST.box}>
+          <p style={{fontSize:13,color:"#aaa",lineHeight:"1.5",margin:"0 0 12px"}}>
+            Play a 3-night series. Each night: 3 player props, over or under. Hit 2 of 3 to survive. Your multiplier compounds. Cash out or push for more.
+          </p>
+          <div style={{display:"flex",gap:8,marginBottom:12}}>
+            {NIGHTS.map(function(n,i){return(
+              <div key={i} style={{flex:1,background:"#111",borderRadius:10,padding:"10px 8px",border:"1px solid #222",textAlign:"center"}}>
+                <div style={{fontSize:10,color:"#555",fontWeight:600}}>{"NIGHT "+(i+1)}</div>
+                <div style={{fontSize:16,marginTop:2}}>{n.icon}</div>
+                <div style={{fontSize:10,color:"#666",marginTop:2}}>{"2/3: "+n.mult2+"x"}</div>
+                <div style={{fontSize:10,color:n.color,fontWeight:700}}>{"3/3: "+n.mult3+"x"}</div>
+              </div>
+            )})}
+          </div>
+          <div style={{borderTop:"1px solid #222",paddingTop:8}}>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"3px 0"}}>
+              <span style={{fontSize:12,color:"#666"}}>Floor (2-2-2)</span><span style={{fontSize:12,color:"#fff",fontWeight:700}}>3.6x ($18)</span>
             </div>
-            <div style={{borderTop:"1px solid #222",paddingTop:10}}>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"3px 0"}}>
-                <span style={{fontSize:12,color:"#666"}}>Floor (2-2-2)</span>
-                <span style={{fontSize:12,color:"#fff",fontWeight:700}}>3.6x ($18)</span>
-              </div>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"3px 0"}}>
-                <span style={{fontSize:12,color:"#666"}}>Mid (3-2-3)</span>
-                <span style={{fontSize:12,color:"#f97316",fontWeight:700}}>10.8x ($54)</span>
-              </div>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"3px 0"}}>
-                <span style={{fontSize:12,color:NIGHTS[2].color}}>Perfect (3-3-3)</span>
-                <span style={{fontSize:12,color:NIGHTS[2].color,fontWeight:700}}>{"18x ($90) "+E.trophy}</span>
-              </div>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"3px 0"}}>
+              <span style={{fontSize:12,color:"#f97316"}}>Strong (3-2-3)</span><span style={{fontSize:12,color:"#f97316",fontWeight:700}}>10.8x ($54)</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"3px 0"}}>
+              <span style={{fontSize:12,color:"#ef4444"}}>Perfect (3-3-3)</span><span style={{fontSize:12,color:"#ef4444",fontWeight:700}}>{"18x ($90) "+E.trophy}</span>
             </div>
           </div>
-          <button onClick={function(){setView("nightIntro")}} style={ST.mainBtn}>{"Play Series \u2014 $5 Entry"}</button>
         </div>
-      </div>
+        <button onClick={function(){setView("nightIntro")}} style={ST.mainBtn}>{"Play Series \u2014 $5 Entry"}</button>
+      </div></div>
     );
   }
 
-  // NIGHT INTRO
+  // ====== NIGHT INTRO ======
   if (view === "nightIntro") {
-    var cats = night.innings.map(function(inn) { return inn.icon + " " + inn.cat; });
+    var cm = getMult();
     return (
-      <div style={ST.ctr}>
-        <div style={ST.splash}>
-          <div style={{fontSize:48,lineHeight:1}}>{night.icon}</div>
-          <h2 style={{fontSize:22,fontWeight:800,margin:0,color:night.color}}>{night.title}</h2>
-          <p style={{fontSize:13,color:"#888",margin:0}}>{night.subtitle}</p>
-          {nightIdx > 0 && (
-            <div style={{background:"#1a1a1a",borderRadius:10,padding:"10px 16px",marginTop:8}}>
-              <span style={{fontSize:13,color:"#999"}}>Current multiplier: </span>
-              <span style={{fontSize:16,fontWeight:800,color:"#f59e0b"}}>{getCurrentMult().toFixed(1)+"x"}</span>
-              <span style={{fontSize:12,color:"#666",marginLeft:6}}>{"($"+(getCurrentMult()*entry).toFixed(2)+")"}</span>
-            </div>
-          )}
-          <div style={{background:"#1a1a1a",borderRadius:12,padding:"14px 18px",width:"100%",maxWidth:320,marginTop:12}}>
-            <p style={{fontSize:12,color:"#666",margin:"0 0 8px",fontWeight:600}}>TONIGHT'S CATEGORIES</p>
-            {night.innings.map(function(inn,i) {
-              return (
-                <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 0",borderTop:i>0?"1px solid #222":"none"}}>
-                  <span style={{fontSize:16}}>{inn.icon}</span>
-                  <div>
-                    <div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{inn.cat}</div>
-                    <div style={{fontSize:11,color:"#666"}}>{inn.desc}</div>
-                  </div>
+      <div style={ST.ctr}><div style={ST.splash}>
+        <div style={{fontSize:48,lineHeight:1}}>{night.icon}</div>
+        <h2 style={{fontSize:22,fontWeight:800,margin:0,color:night.color}}>{night.title}</h2>
+        <p style={{fontSize:13,color:"#888",margin:0}}>{night.sub}</p>
+        {nIdx>0 && (
+          <div style={{background:"#1a1a1a",borderRadius:10,padding:"10px 16px",marginTop:8}}>
+            <span style={{fontSize:13,color:"#999"}}>Running: </span>
+            <span style={{fontSize:16,fontWeight:800,color:"#f59e0b"}}>{cm.toFixed(1)+"x"}</span>
+            <span style={{fontSize:12,color:"#666",marginLeft:6}}>{"($"+(cm*entry).toFixed(2)+")"}</span>
+          </div>
+        )}
+        <div style={{background:"#1a1a1a",borderRadius:12,padding:"14px 18px",width:"100%",maxWidth:340,marginTop:12}}>
+          <p style={{fontSize:11,color:"#555",margin:"0 0 8px",fontWeight:600,textTransform:"uppercase",letterSpacing:1}}>Tonight's Props</p>
+          {night.picks.map(function(pk,i){return(
+            <div key={i} style={{padding:"10px 0",borderTop:i>0?"1px solid #222":"none"}}>
+              <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}>
+                <span style={{fontSize:14}}>{pk.icon}</span>
+                <span style={{fontSize:12,color:"#666",fontWeight:600}}>{pk.cat}</span>
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <div>
+                  <span style={{fontSize:15,fontWeight:700,color:"#fff"}}>{pk.player}</span>
+                  <span style={{fontSize:11,color:night.color,marginLeft:6,fontWeight:600}}>{pk.team}</span>
                 </div>
-              );
-            })}
-            <div style={{marginTop:10,padding:"8px 0 0",borderTop:"1px solid #222",display:"flex",justifyContent:"space-between"}}>
-              <span style={{fontSize:12,color:"#888"}}>2 of 3 correct</span>
-              <span style={{fontSize:12,fontWeight:700,color:night.color}}>{"Survive (" + night.mult2 + "x)"}</span>
+                <div style={{background:"#222",borderRadius:8,padding:"4px 10px"}}>
+                  <span style={{fontSize:14,fontWeight:800,color:"#fff"}}>{pk.line}</span>
+                  <span style={{fontSize:10,color:"#888",marginLeft:4}}>{pk.stat}</span>
+                </div>
+              </div>
             </div>
-            <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0"}}>
-              <span style={{fontSize:12,color:"#888"}}>3 of 3 correct</span>
-              <span style={{fontSize:12,fontWeight:700,color:night.color}}>{"Sweep (" + night.mult3 + "x)"}</span>
+          )})}
+          <div style={{borderTop:"1px solid #222",paddingTop:8,marginTop:4}}>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"2px 0"}}>
+              <span style={{fontSize:12,color:"#888"}}>2/3 correct</span>
+              <span style={{fontSize:12,fontWeight:700,color:night.color}}>{night.mult2+"x"}</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"2px 0"}}>
+              <span style={{fontSize:12,color:"#888"}}>Sweep (3/3)</span>
+              <span style={{fontSize:12,fontWeight:700,color:night.color}}>{night.mult3+"x"}</span>
             </div>
           </div>
-          {nightIdx > 0 && (
-            <button onClick={function(){setView("cashout")}} style={{marginTop:16,background:"#333",color:"#fff",border:"none",borderRadius:12,padding:"13px 0",fontSize:15,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-              {E.money + " Cash Out at " + getCurrentMult().toFixed(1) + "x ($" + (getCurrentMult()*entry).toFixed(2) + ")"}
-            </button>
-          )}
-          <button onClick={startNight} style={{marginTop:nightIdx>0?8:16,background:night.color,color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-            {nightIdx > 0 ? "Push to Night " + (nightIdx+1) + " " + E.arrow : "Start Night 1"}
-          </button>
         </div>
-      </div>
+        {nIdx>0 && (
+          <button onClick={function(){setView("cashout")}} style={{marginTop:14,background:"#222",color:"#fff",border:"1px solid #333",borderRadius:12,padding:"13px 0",fontSize:14,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>
+            {E.money+" Cash Out "+cm.toFixed(1)+"x ($"+(cm*entry).toFixed(2)+")"}
+          </button>
+        )}
+        <button onClick={startNight} style={{marginTop:nIdx>0?8:14,background:night.color,color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>
+          {nIdx>0?"Push to Night "+(nIdx+1)+" "+E.arrow:"Start Night 1"}
+        </button>
+      </div></div>
     );
   }
 
-  // CASHOUT
+  // ====== CASHOUT ======
   if (view === "cashout") {
-    var cm = getCurrentMult();
+    var cm = getMult();
+    var potMax = cm * night.mult3;
     return (
-      <div style={ST.ctr}>
-        <div style={ST.splash}>
-          <div style={{fontSize:48,lineHeight:1}}>{E.money}</div>
-          <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Cash Out?</h2>
-          <div style={{width:100,height:100,borderRadius:"50%",border:"3px solid #f59e0b",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",marginTop:8}}>
-            <span style={{fontSize:28,fontWeight:800,color:"#f59e0b"}}>{cm.toFixed(1)+"x"}</span>
-            <span style={{fontSize:13,color:"#888"}}>{"$"+(cm*entry).toFixed(2)}</span>
-          </div>
-          <div style={{background:"#1a1a1a",borderRadius:12,padding:"14px 18px",width:"100%",maxWidth:320,marginTop:12}}>
-            <p style={{fontSize:13,color:"#aaa",lineHeight:"1.5",margin:0}}>
-              {"You've survived " + nightIdx + " night" + (nightIdx>1?"s":"") + ". Lock in your profit now, or push to Night " + (nightIdx+1) + " where " + (nightIdx===1?"medium":"high") + "-variance picks could multiply your payout" + (nightIdx===1?" up to " + (cm*night.mult3).toFixed(1)+"x":"") + " \u2014 or end your run."}
-            </p>
-          </div>
-          <button onClick={function(){setView("cashedOut")}} style={{marginTop:16,background:"#22c55e",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-            {E.money + " Lock In $" + (cm*entry).toFixed(2)}
-          </button>
-          <button onClick={startNight} style={{marginTop:8,background:night.color,color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-            {"Keep Going " + E.arrow}
-          </button>
+      <div style={ST.ctr}><div style={ST.splash}>
+        <div style={{fontSize:48,lineHeight:1}}>{E.money}</div>
+        <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Cash Out?</h2>
+        <div style={{width:100,height:100,borderRadius:"50%",border:"3px solid #22c55e",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",marginTop:8}}>
+          <span style={{fontSize:26,fontWeight:800,color:"#22c55e"}}>{"$"+(cm*entry).toFixed(2)}</span>
+          <span style={{fontSize:12,color:"#888"}}>{cm.toFixed(1)+"x"}</span>
         </div>
-      </div>
+        <div style={{background:"#1a1a1a",borderRadius:12,padding:"14px 18px",width:"100%",maxWidth:340,marginTop:12}}>
+          <p style={{fontSize:13,color:"#aaa",lineHeight:"1.5",margin:"0 0 10px"}}>
+            {"Lock in your profit, or push to Night "+(nIdx+1)+" where your multiplier could reach "+potMax.toFixed(1)+"x ($"+(potMax*entry).toFixed(2)+") \u2014 or you lose everything."}
+          </p>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0",borderTop:"1px solid #222"}}>
+            <span style={{fontSize:12,color:"#888"}}>If you sweep Night {nIdx+1}</span>
+            <span style={{fontSize:12,color:night.color,fontWeight:700}}>{potMax.toFixed(1)+"x ($"+(potMax*entry).toFixed(2)+")"}</span>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0"}}>
+            <span style={{fontSize:12,color:"#888"}}>If you go 2/3</span>
+            <span style={{fontSize:12,color:"#fff",fontWeight:700}}>{(cm*night.mult2).toFixed(1)+"x ($"+((cm*night.mult2)*entry).toFixed(2)+")"}</span>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0"}}>
+            <span style={{fontSize:12,color:"#ef4444"}}>If you go 0-1/3</span>
+            <span style={{fontSize:12,color:"#ef4444",fontWeight:700}}>Eliminated ($0)</span>
+          </div>
+        </div>
+        <button onClick={function(){setView("cashedOut")}} style={{marginTop:14,background:"#22c55e",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>
+          {"Lock In $"+(cm*entry).toFixed(2)}
+        </button>
+        <button onClick={startNight} style={{marginTop:8,background:night.color,color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>
+          {"Risk It \u2014 Night "+(nIdx+1)+" "+E.arrow}
+        </button>
+      </div></div>
     );
   }
 
-  // CASHED OUT
+  // ====== CASHED OUT ======
   if (view === "cashedOut") {
-    var cm = getCurrentMult();
+    var cm = getMult();
     return (
-      <div style={ST.ctr}>
-        <div style={ST.splash}>
-          <div style={{fontSize:56,lineHeight:1}}>{E.money}</div>
-          <h2 style={{fontSize:22,fontWeight:800,margin:0,color:"#22c55e"}}>Cashed Out!</h2>
-          <div style={{fontSize:32,fontWeight:800,color:"#f59e0b",marginTop:8}}>{"$"+(cm*entry).toFixed(2)}</div>
-          <p style={{fontSize:14,color:"#888",marginTop:4}}>{"on a $" + entry + " entry (" + cm.toFixed(1) + "x)"}</p>
-          <div style={{background:"#1a1a1a",borderRadius:12,padding:"14px 18px",width:"100%",maxWidth:320,marginTop:12}}>
-            {nightResults.map(function(res,ni) {
-              var c = res.filter(Boolean).length;
-              return (
-                <div key={ni} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderTop:ni>0?"1px solid #222":"none"}}>
-                  <span style={{fontSize:13,color:"#aaa"}}>{"Night "+(ni+1)}</span>
-                  <span style={{fontSize:13,fontWeight:700,color:c===3?"#22c55e":"#f59e0b"}}>{c+"/3 " + (c===3?"Swept":"Survived")}</span>
-                  <span style={{fontSize:13,fontWeight:700,color:NIGHTS[ni].color}}>{mults[ni]+"x"}</span>
-                </div>
-              );
-            })}
-          </div>
-          <button onClick={reset} style={{marginTop:20,background:"#f59e0b",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-            Play New Series
-          </button>
+      <div style={ST.ctr}><div style={ST.splash}>
+        <div style={{fontSize:56,lineHeight:1}}>{E.money}</div>
+        <h2 style={{fontSize:22,fontWeight:800,margin:0,color:"#22c55e"}}>Cashed Out!</h2>
+        <div style={{fontSize:32,fontWeight:800,color:"#f59e0b",marginTop:8}}>{"$"+(cm*entry).toFixed(2)}</div>
+        <p style={{fontSize:14,color:"#888"}}>{"from $"+entry+" entry ("+cm.toFixed(1)+"x)"}</p>
+        <div style={{background:"#1a1a1a",borderRadius:12,padding:"12px 18px",width:"100%",maxWidth:340,marginTop:8}}>
+          {allResults.map(function(res,ni){
+            var c=res.filter(Boolean).length;
+            return(
+              <div key={ni} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderTop:ni>0?"1px solid #222":"none"}}>
+                <span style={{fontSize:13,color:"#aaa"}}>{"Night "+(ni+1)}</span>
+                <span style={{fontSize:13,fontWeight:700,color:c===3?"#22c55e":"#f59e0b"}}>{c+"/3"+(c===3?" Swept":" Survived")}</span>
+                <span style={{fontSize:13,fontWeight:700,color:NIGHTS[ni].color}}>{mults[ni]+"x"}</span>
+              </div>
+            );
+          })}
         </div>
-      </div>
+        <button onClick={reset} style={{marginTop:20,background:"#f59e0b",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>Play New Series</button>
+      </div></div>
     );
   }
 
-  // NIGHT RESULT
+  // ====== NIGHT RESULT ======
   if (view === "nightResult") {
-    var lastRes = nightResults[nightResults.length - 1];
-    var correct = lastRes ? lastRes.filter(Boolean).length : 0;
-    var survived = correct >= 2;
-    var swept = correct === 3;
-    var thisMult = swept ? night.mult3 : survived ? night.mult2 : 0;
-    var totalMult = getCurrentMult();
-    var isLastNight = nightIdx === 2;
-    var eliminated = !survived;
-
+    var lastRes = allResults[allResults.length-1];
+    var correct = lastRes?lastRes.filter(Boolean).length:0;
+    var survived = correct>=2;
+    var swept = correct===3;
+    var isLast = nIdx===2;
+    var cm = getMult();
     return (
-      <div style={ST.ctr}>
-        <div style={ST.splash}>
-          <h2 style={{fontSize:20,fontWeight:800,margin:0,color:night.color}}>{night.title + " Results"}</h2>
-          {eliminated && <div style={{fontSize:48,lineHeight:1,marginTop:8}}>{E.cross}</div>}
-          {survived && <div style={{fontSize:48,lineHeight:1,marginTop:8}}>{swept ? E.fire : E.check}</div>}
-          <div style={{fontSize:18,fontWeight:700,margin:"8px 0",color:eliminated?"#ef4444":swept?"#22c55e":"#f59e0b"}}>
-            {eliminated ? "Eliminated" : swept ? "Swept! "+night.mult3+"x" : "Survived! "+night.mult2+"x"}
-          </div>
-          <div style={{width:"100%",maxWidth:320,display:"flex",flexDirection:"column",gap:6}}>
-            {night.innings.map(function(inn,i) {
-              var hit = lastRes && lastRes[i];
-              return (
-                <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",borderRadius:10,
-                  border:"1px solid "+(hit?"#22c55e":"#ef4444"),background:hit?"rgba(34,197,94,0.08)":"rgba(239,68,68,0.06)"}}>
-                  <span style={{fontSize:16}}>{inn.icon}</span>
-                  <span style={{fontSize:13,fontWeight:600,color:"#bbb",flex:1}}>{inn.cat}</span>
-                  <span style={{fontWeight:700,fontSize:14,color:hit?"#22c55e":"#ef4444"}}>{hit?E.check:E.cross}</span>
-                </div>
-              );
-            })}
-          </div>
-          {survived && !isLastNight && (
-            <div style={{background:"#1a1a1a",borderRadius:10,padding:"10px 16px",marginTop:12,width:"100%",maxWidth:320}}>
-              <div style={{display:"flex",justifyContent:"space-between"}}>
-                <span style={{fontSize:13,color:"#888"}}>Cumulative multiplier</span>
-                <span style={{fontSize:16,fontWeight:800,color:"#f59e0b"}}>{totalMult.toFixed(1)+"x"}</span>
-              </div>
-              <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
-                <span style={{fontSize:12,color:"#666"}}>Current value</span>
-                <span style={{fontSize:13,fontWeight:700,color:"#fff"}}>{"$"+(totalMult*entry).toFixed(2)}</span>
-              </div>
-            </div>
-          )}
-          {survived && isLastNight && (
-            <div style={{background:"rgba(245,158,11,0.1)",borderRadius:12,padding:"16px",marginTop:12,textAlign:"center",width:"100%",maxWidth:320}}>
-              <div style={{fontSize:13,color:"#888"}}>Final Payout</div>
-              <div style={{fontSize:36,fontWeight:800,color:"#f59e0b"}}>{totalMult.toFixed(1)+"x"}</div>
-              <div style={{fontSize:20,fontWeight:700,color:"#22c55e"}}>{"$"+(totalMult*entry).toFixed(2)}</div>
-              <div style={{fontSize:12,color:"#666",marginTop:4}}>{"on $"+entry+" entry"}</div>
-            </div>
-          )}
-          {eliminated && (
-            <button onClick={reset} style={{marginTop:16,background:"#f59e0b",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-              Try Again
-            </button>
-          )}
-          {survived && isLastNight && (
-            <button onClick={reset} style={{marginTop:16,background:"#22c55e",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-              {"Collect $"+(totalMult*entry).toFixed(2)+" "+E.trophy}
-            </button>
-          )}
-          {survived && !isLastNight && (
-            <button onClick={function(){setNightIdx(function(n){return n+1}); setView("nightIntro");}} style={{marginTop:16,background:NIGHTS[nightIdx+1].color,color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:320}}>
-              {"Night " + (nightIdx+2) + " " + E.arrow}
-            </button>
-          )}
+      <div style={ST.ctr}><div style={ST.splash}>
+        <h2 style={{fontSize:20,fontWeight:800,margin:0,color:night.color}}>{night.title.split("\u2014")[1]+" Results"}</h2>
+        <div style={{fontSize:48,lineHeight:1,marginTop:8}}>{!survived?E.cross:swept?E.fire:E.check}</div>
+        <div style={{fontSize:18,fontWeight:700,margin:"6px 0",color:!survived?"#ef4444":swept?"#22c55e":"#f59e0b"}}>
+          {!survived?"Eliminated \u2014 0-1 correct":swept?"Swept! "+night.mult3+"x":"Survived! "+night.mult2+"x"}
         </div>
-      </div>
+        <div style={{width:"100%",maxWidth:340,display:"flex",flexDirection:"column",gap:6}}>
+          {night.picks.map(function(pk,i){
+            var hit=lastRes&&lastRes[i];
+            var userPick = curPicks[i] || (i===pIdx?sel:null);
+            return(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",borderRadius:10,
+                border:"1px solid "+(hit?"#22c55e":"#ef4444"),background:hit?"rgba(34,197,94,0.08)":"rgba(239,68,68,0.06)"}}>
+                <span style={{fontSize:16}}>{pk.icon}</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:700,color:"#ccc"}}>{pk.player}</div>
+                  <div style={{fontSize:11,color:"#777"}}>{pk.stat+" "+pk.line}</div>
+                </div>
+                <span style={{fontWeight:700,fontSize:14,color:hit?"#22c55e":"#ef4444"}}>{hit?E.check:E.cross}</span>
+              </div>
+            );
+          })}
+        </div>
+        {survived && (
+          <div style={{background:"rgba(245,158,11,0.08)",borderRadius:10,padding:"10px 16px",marginTop:10,width:"100%",maxWidth:340}}>
+            <div style={{display:"flex",justifyContent:"space-between"}}>
+              <span style={{fontSize:13,color:"#888"}}>{isLast?"Final payout":"Running multiplier"}</span>
+              <span style={{fontSize:16,fontWeight:800,color:"#f59e0b"}}>{cm.toFixed(1)+"x"}</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
+              <span style={{fontSize:12,color:"#666"}}>{isLast?"You win":"Current value"}</span>
+              <span style={{fontSize:14,fontWeight:700,color:isLast?"#22c55e":"#fff"}}>{"$"+(cm*entry).toFixed(2)}</span>
+            </div>
+          </div>
+        )}
+        {!survived && (
+          <button onClick={reset} style={{marginTop:16,background:"#f59e0b",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>Try Again</button>
+        )}
+        {survived&&isLast && (
+          <button onClick={reset} style={{marginTop:16,background:"#22c55e",color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>
+            {"Collect $"+(cm*entry).toFixed(2)+" "+E.trophy}
+          </button>
+        )}
+        {survived&&!isLast && (
+          <button onClick={function(){setNIdx(function(n){return n+1});setView("nightIntro")}} style={{marginTop:16,background:NIGHTS[nIdx+1].color,color:"#000",border:"none",borderRadius:12,padding:"14px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}}>
+            {"Night "+(nIdx+2)+" "+E.arrow}
+          </button>
+        )}
+      </div></div>
     );
   }
 
-  // PICK SCREEN
-  var inn = night.innings[pickIdx];
+  // ====== PICK SCREEN ======
+  var pk = night.picks[pIdx];
   return (
     <div style={ST.ctr}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0 8px"}}>
-        <div style={{fontSize:12,color:"#666",fontWeight:600}}>{"NIGHT "+(nightIdx+1)+" OF 3"}</div>
-        {nightIdx > 0 && <div style={{fontSize:12,color:"#f59e0b",fontWeight:700}}>{"Running: "+getCurrentMult().toFixed(1)+"x"}</div>}
+        <div style={{fontSize:12,color:"#666",fontWeight:600}}>{"NIGHT "+(nIdx+1)+" OF 3"}</div>
+        {nIdx>0 && <div style={{fontSize:12,color:"#f59e0b",fontWeight:700}}>{"Running: "+getMult().toFixed(1)+"x"}</div>}
       </div>
-      <div style={{display:"flex",justifyContent:"center",gap:10,padding:"0 0 16px"}}>
-        {[0,1,2].map(function(i) {
-          var done = i < pickIdx || (i === pickIdx && locked);
-          var active = i === pickIdx && !locked;
-          return (
-            <div key={i} style={{width:60,height:6,borderRadius:3,background:done?night.color:active?"#555":"#222"}} />
-          );
+
+      <div style={{display:"flex",justifyContent:"center",gap:10,padding:"0 0 14px"}}>
+        {[0,1,2].map(function(i){
+          var done=i<pIdx||(i===pIdx&&locked);var active=i===pIdx&&!locked;
+          return <div key={i} style={{width:60,height:6,borderRadius:3,background:done?night.color:active?"#555":"#222"}}/>;
         })}
       </div>
 
       <div style={{background:"#141414",borderRadius:16,padding:"18px 16px",border:"1px solid #222",
         opacity:fading?0:1,transform:fading?"translateX(-30px)":"translateX(0)",transition:"all 0.25s ease"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <span style={{fontSize:11,color:"#555",fontWeight:600,textTransform:"uppercase",letterSpacing:1}}>{"Pick "+(pickIdx+1)+" of 3"}</span>
-          <span style={{fontSize:14,fontWeight:700,color:night.color}}>{inn.icon+" "+inn.cat}</span>
-        </div>
-        <p style={{fontSize:16,fontWeight:600,color:"#eee",lineHeight:"1.4",margin:"0 0 14px"}}>{inn.desc}</p>
 
-        {inn.opts.map(function(opt, i) {
-          return (
-            <button key={i} disabled={locked} onClick={function(){setSel(i)}}
-              style={{width:"100%",textAlign:"left",border:"2px solid "+(sel===i?"#f59e0b":"#333"),
-                borderRadius:12,padding:"12px 14px",marginBottom:8,cursor:locked?"default":"pointer",
-                background:sel===i?"rgba(245,158,11,0.1)":"#1a1a1a",
-                opacity:locked&&sel!==i?0.35:1,display:"block"}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <span style={{fontSize:15,fontWeight:700,color:"#fff"}}>{opt.name}</span>
-                {opt.tag && <span style={{fontSize:11,fontWeight:600,color:night.color,background:night.color+"22",padding:"2px 7px",borderRadius:5}}>{opt.tag}</span>}
-              </div>
-              <div style={{fontSize:11,color:"#777",marginTop:3,lineHeight:"1.3"}}>{opt.info}</div>
-            </button>
-          );
-        })}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+          <span style={{fontSize:11,color:"#555",fontWeight:600,textTransform:"uppercase",letterSpacing:1}}>{"Pick "+(pIdx+1)+" of 3"}</span>
+          <span style={{fontSize:13,fontWeight:700,color:night.color}}>{pk.icon+" "+pk.cat}</span>
+        </div>
+
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+          <div>
+            <div style={{fontSize:20,fontWeight:800,color:"#fff"}}>{pk.player}</div>
+            <div style={{display:"flex",alignItems:"center",gap:6,marginTop:2}}>
+              <span style={{fontSize:12,fontWeight:600,color:night.color,background:night.color+"22",padding:"1px 6px",borderRadius:4}}>{pk.team}</span>
+              <span style={{fontSize:12,color:"#666"}}>{pk.opp}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style={{background:"#0d0d0d",borderRadius:12,padding:"14px 16px",marginBottom:14,textAlign:"center"}}>
+          <div style={{fontSize:11,color:"#555",fontWeight:600,textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>{pk.stat}</div>
+          <div style={{fontSize:36,fontWeight:800,color:"#fff"}}>{pk.line}</div>
+        </div>
+
+        <div style={{marginBottom:14}}>
+          {pk.context.map(function(c,i){return(
+            <div key={i} style={{fontSize:12,color:"#888",lineHeight:"1.5",padding:"3px 0 3px 10px",borderLeft:"2px solid #222"}}>{c}</div>
+          )})}
+          {pk.trend && <div style={{fontSize:11,color:"#666",marginTop:6,fontStyle:"italic"}}>{E.chart+" "+pk.trend}</div>}
+        </div>
+
+        <div style={{display:"flex",gap:10}}>
+          <button disabled={locked} onClick={function(){setSel("over")}}
+            style={{flex:1,padding:"16px 0",borderRadius:12,border:"2px solid "+(sel==="over"?"#22c55e":"#333"),
+              background:sel==="over"?"rgba(34,197,94,0.1)":"#1a1a1a",cursor:locked?"default":"pointer",
+              opacity:locked&&sel!=="over"?0.35:1,textAlign:"center"}}>
+            <div style={{fontSize:20}}>{E.up}</div>
+            <div style={{fontSize:15,fontWeight:700,color:sel==="over"?"#22c55e":"#fff",marginTop:4}}>Over {pk.line}</div>
+          </button>
+          <button disabled={locked} onClick={function(){setSel("under")}}
+            style={{flex:1,padding:"16px 0",borderRadius:12,border:"2px solid "+(sel==="under"?"#ef4444":"#333"),
+              background:sel==="under"?"rgba(239,68,68,0.08)":"#1a1a1a",cursor:locked?"default":"pointer",
+              opacity:locked&&sel!=="under"?0.35:1,textAlign:"center"}}>
+            <div style={{fontSize:20}}>{E.down}</div>
+            <div style={{fontSize:15,fontWeight:700,color:sel==="under"?"#ef4444":"#fff",marginTop:4}}>Under {pk.line}</div>
+          </button>
+        </div>
       </div>
 
       <div style={{padding:"16px 0 20px"}}>
-        {!locked ? (
+        {!locked?(
           <button onClick={lockPick} disabled={sel===null}
             style={{width:"100%",background:"#f59e0b",color:"#000",border:"none",borderRadius:12,
               padding:"15px 0",fontSize:16,fontWeight:700,cursor:sel===null?"default":"pointer",
               opacity:sel===null?0.35:1,maxWidth:400}}>
             {"Lock It In "+E.lock}
           </button>
-        ) : (
+        ):(
           <button onClick={nextPick}
             style={{width:"100%",background:"#22c55e",color:"#000",border:"none",borderRadius:12,
-              padding:"15px 0",fontSize:16,fontWeight:700,cursor:"pointer",maxWidth:400,
-              opacity:fading?0.6:1}}>
-            {pickIdx < 2 ? "Pick " + (pickIdx+2) + " " + E.arrow : "See Results "+E.trophy}
+              padding:"15px 0",fontSize:16,fontWeight:700,cursor:"pointer",maxWidth:400,opacity:fading?0.6:1}}>
+            {pIdx<2?"Next Prop "+E.arrow:"See Results "+E.trophy}
           </button>
         )}
       </div>
@@ -476,15 +522,14 @@ function App() {
   );
 }
 
-var ST = {
-  ctr: {minHeight:"100vh",background:"#0d0d0d",color:"#fff",fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",maxWidth:430,margin:"0 auto",padding:"14px 16px 50px",position:"relative"},
-  splash: {display:"flex",flexDirection:"column",alignItems:"center",paddingTop:30,gap:8},
-  box: {background:"#1a1a1a",borderRadius:14,padding:"16px 18px",width:"100%",maxWidth:340,marginTop:12},
-  mainBtn: {marginTop:16,background:"#f59e0b",color:"#000",border:"none",borderRadius:12,padding:"15px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}
+var ST={
+  ctr:{minHeight:"100vh",background:"#0d0d0d",color:"#fff",fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",maxWidth:430,margin:"0 auto",padding:"14px 16px 50px"},
+  splash:{display:"flex",flexDirection:"column",alignItems:"center",paddingTop:30,gap:8},
+  box:{background:"#1a1a1a",borderRadius:14,padding:"16px 18px",width:"100%",maxWidth:340,marginTop:12},
+  mainBtn:{marginTop:16,background:"#f59e0b",color:"#000",border:"none",borderRadius:12,padding:"15px 0",fontSize:16,fontWeight:700,cursor:"pointer",width:"100%",maxWidth:340}
 };
 
-var root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
